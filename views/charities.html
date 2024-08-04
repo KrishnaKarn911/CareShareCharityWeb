@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charities</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Charities</h2>
+        <div id="charityList"></div>
+    </div>
+    
+    <script>
+        async function fetchCharities() {
+            const response = await fetch('/api/charity');
+            const charities = await response.json();
+            const charityList = document.getElementById('charityList');
+
+            charities.forEach(charity => {
+                const charityDiv = document.createElement('div');
+                charityDiv.innerHTML = `
+            <h3>${charity.name}</h3>
+            <p>${charity.description}</p>
+            <button onclick="donate(${charity.id})">Donate</button>
+          `;
+                charityList.appendChild(charityDiv);
+            });
+        }
+
+        async function donate(charityId) {
+            const amount = prompt('Enter donation amount:');
+            const token = localStorage.getItem('token');
+
+            const response = await fetch('/api/donation/donate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ amount, charityId }),
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        }
+
+        fetchCharities();
+    </script>
+
+</body>
+</html>

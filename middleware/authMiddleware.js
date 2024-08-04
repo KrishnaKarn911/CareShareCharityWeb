@@ -1,0 +1,30 @@
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
+
+exports.userAuthorisation = async(req, res, next) => {
+    try {
+        let token = req.headers.authorization.split(" ")[1];
+        console.log(token);
+        if (!token) {
+            return res.status(401).json({
+                status: "fail",
+                message: "Unauthorized user... Try login again"
+            });
+        }
+
+
+        const userObj = jwt.verify(token, process.env.JWT_SECRET);
+       
+        const user = await User.findByPk(userObj.id);
+
+        req.user = user;
+        next();
+    } catch (err) {
+        console.log("In Middleware", err);
+        res.status(401).json({
+            status: "fail",
+            message: "Unauthorized user... Try login again"
+        });
+    }
+};

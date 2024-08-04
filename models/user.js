@@ -40,10 +40,6 @@ const User = sequelize.define('User', {
             }
         }
     },
-    donation: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0
-    },
     passwordResetToken: DataTypes.STRING,
     passwordResetExpires: DataTypes.DATE,
 }, {

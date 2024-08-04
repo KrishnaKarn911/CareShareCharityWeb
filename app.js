@@ -1,24 +1,24 @@
-const bodyParser = require('body-parser');
 const express = require('express');
-const path=require('path');
-require('dotenv').config({path: 'config.env'});
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/authRoutes');
+const charityRoutes = require('./routes/charityRoutes');
+const donationRoutes = require('./routes/donationRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const sequelize = require('./config/db');
+require('dotenv').config();
 
-
-
-const app=express();
-
-
-
-app.use(express.static(path.join(__dirname, 'public')));
+const app = express();
 app.use(bodyParser.json());
 
-
-app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname, 'views', 'homepage.html'));
-})
+app.use('/api/auth', authRoutes);
+app.use('/api/charity', charityRoutes);
+app.use('/api/donation', donationRoutes);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, ()=>{
-    console.log('Server Starte in port: ', PORT);
-})
+sequelize.sync().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+});

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Profile</h2>
+        <div id="profileInfo"></div>
+        <h3>Donation History</h3>
+        <ul id="donationHistory"></ul>
+    </div>
+    
+    <script>
+        async function fetchProfile() {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/auth/profile', {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+
+            if (response.ok) {
+                const profile = await response.json();
+                document.getElementById('profileInfo').innerText = JSON.stringify(profile, null, 2);
+                fetchDonationHistory();
+            } else {
+                alert('Failed to fetch profile.');
+                window.location.href = 'login.html';
+            }
+        }
+
+        async function fetchDonationHistory() {
+            const token = localStorage.getItem('token');
+            const response = await fetch('/api/donation/history', {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+
+            if (response.ok) {
+                const history = await response.json();
+                const historyList = document.getElementById('donationHistory');
+                history.forEach(donation => {
+                    const listItem = document.createElement('li');
+                    listItem.innerText = `Donated ₹${donation.amount} to Charity ID: ${donation.charityId}`;
+                    historyList.appendChild(listItem);
+                });
+            } else {
+                alert('Failed to fetch donation history.');
+            }
+        }
+
+        fetchProfile();
+    </script>
+
+</body>
+</html>
