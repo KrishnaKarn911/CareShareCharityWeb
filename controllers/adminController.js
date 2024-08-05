@@ -1,23 +1,49 @@
-// const User = require('../models/user');
-// //const Charity = require('../models/charity');
+// adminController.js
+const catchAsync=require('./../utils/catchAsync');
+const path=require('path')
 
-// exports.getUsers = async (req, res) => {
-//   try {
-//     const users = await User.findAll();
-//     res.json(users);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+const Charity = require('../models/charity');
 
-// exports.updateUserStatus = async (req, res) => {
-//   const { id } = req.params;
-//   const { status } = req.body;
+exports.approveCharity = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const charity = await Charity.findByPk(id);
 
-//   try {
-//     await User.update({ status }, { where: { id } });
-//     res.json({ message: 'User status updated.' });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+    if (!charity) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Charity not found'
+        });
+    }
+
+    charity.approved = true;
+    await charity.save();
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Charity approved'
+    });
+});
+
+exports.rejectCharity = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const charity = await Charity.findByPk(id);
+
+    if (!charity) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'Charity not found'
+        });
+    }
+
+    await charity.destroy();
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Charity rejected'
+    });
+});
+
+
+exports.getProfilePage=(req,res)=>{
+     res.status(200).sendFile(path.join(__dirname,'..', 'views', 'adminprofile.html'))
+}

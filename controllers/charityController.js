@@ -1,42 +1,44 @@
-// const Charity = require('../models/charity');
+const io = require('../app');
+const Charity = require('./../models/charity');
+const catchAsync = require('./../utils/catchAsync');
+const path = require('path');
 
-// exports.registerCharity = async (req, res) => {
-//   const { name, description } = req.body;
 
-//   try {
-//     await Charity.create({ name, description });
-//     res.status(201).json({ message: 'Charity registered, pending approval.' });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+console.log(io);
 
-// exports.getCharities = async (req, res) => {
-//   try {
-//     const charities = await Charity.findAll({ where: { approved: true } });
-//     res.json(charities);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+exports.getRegisterCharityPage = (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, '..', 'views', 'registerCharity.html'));
+}
 
-// exports.getPendingCharities = async (req, res) => {
-//   try {
-//     const charities = await Charity.findAll({ where: { approved: false } });
-//     res.json(charities);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+exports.createCharity = catchAsync(async (req, res) => {
+    console.log(req.body);
+    console.log(io);
+    const newCharity = await Charity.create({
+        name: req.body.name,
+        description: req.body.description,
+        approved: false
+    });
 
-// exports.updateCharityStatus = async (req, res) => {
-//   const { id } = req.params;
-//   const { approved } = req.body;
+    // Notify admin about new charity registration
+    io.emit('charityRegistered', {
+        id: newCharity.id,
+        name: newCharity.name,
+        description: newCharity.description
+    });
 
-//   try {
-//     await Charity.update({ approved }, { where: { id } });
-//     res.json({ message: 'Charity status updated.' });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+    res.status(201).json({
+        status: 'success',
+        data: {
+            newCharity
+        }
+    });
+});
+
+exports.getCharities = async (req, res) => {
+    try {
+        const charities = await Charity.findAll({ where: { approved: true } });
+        res.json(charities);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

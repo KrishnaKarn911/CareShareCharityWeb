@@ -1,38 +1,85 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signup Page</title>
+    <title>Profile Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/userRegister.css" />
+    <link rel="stylesheet" href="/css/profile.css" />
 </head>
 
 <body>
-    <div class="navbar">
-        <img src="/images/preview.jpg" alt="Logo">
-        <a href="http://localhost:3000/charitylife/user/donations">Donations</a>
-        <h1>CharityLife</h1>
+    <div class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <img src="/images/preview.jpg" alt="Logo" class="navbar-brand" style="height: 50px;">
+        <h1 class="navbar-brand">CharityLife</h1>
+        <div class="navbar-nav ml-auto">
+            <a class="nav-link" href="http://localhost:3000/charitylife/user/donations"
+                style="color: white;">Donations</a>
+            <button type="button" id="logoutBtn" class="btn btn-dark">Logout</button>
+        </div>
     </div>
-   
+
+    <div class="container mt-4">
+        <div class="row" id="charitiesGrid">
+            <!-- Charities will be loaded here -->
+        </div>
+    </div>
+
     <script src="/js/profile.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        // Clear token and redirect to login page
-        localStorage.removeItem('tokenCharity');
-        window.location.href = 'login.html'; // Change to your actual login page URL
-    });
-</script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('tokenCharity');
+            window.location.href = 'http://localhost:3000/charitylife/user/login';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            axios.get('/charitylife/charity')
+                .then(response => {
+                    const charities = response.data;
+                    const grid = document.getElementById('charitiesGrid');
+
+                    charities.forEach(charity => {
+                        const charityCard = document.createElement('div');
+                        charityCard.className = 'col-md-4 mb-4';
+                        charityCard.innerHTML = `
+                            <div class="card">
+                                <img src="${charity.image}" class="card-img-top" alt="${charity.name}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${charity.name}</h5>
+                                    <p class="card-text">${charity.description}</p>
+                                    <input type="number" class="form-control mb-2" placeholder="Enter amount to donate" id="donateAmount-${charity.id}">
+                                    <button class="btn btn-primary" onclick="donate(${charity.id})">Donate</button>
+                                </div>
+                            </div>
+                        `;
+                        grid.appendChild(charityCard);
+                    });
+                })
+                .catch(error => console.error(error));
+        });
+
+        function donate(charityId) {
+            const amount = document.getElementById(`donateAmount-${charityId}`).value;
+            if (!amount) {
+                alert('Please enter a donation amount.');
+                return;
+            }
+
+            axios.post(`/charitylife/user/donate`, { charityId, amount })
+                .then(response => {
+                    alert('Donation successful!');
+                })
+                .catch(error => console.error(error));
+        }
+    </script>
 </body>
 
 </html>

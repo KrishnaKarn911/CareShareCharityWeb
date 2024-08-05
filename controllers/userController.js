@@ -39,6 +39,7 @@ exports.createUser = catchAsync(async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
+        isAdmin: req.body.isAdmin
     });
 
 
@@ -87,6 +88,31 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.getProfilePage = (req,res)=>{
      res.status(200).sendFile(path.join(__dirname,'..', 'views', 'profile.html'))
 }
+
+
+
+
+exports.getUserProfile = catchAsync(async (req, res) => {
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'User not found'
+        });
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin
+        }
+    });
+});
+
 
 
 

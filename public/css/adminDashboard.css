@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    background-color: #060afc;
+    padding: 10px;
+}
+
+.navbar img {
+    height: 50px;
+    margin-right: 20px;
+}
+
+.navbar h1 {
+    color: white;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+}
+
+.notification {
+    margin-top: 15px;
+}
+
+.notification strong {
+    display: block;
+}
+
+.notification p {
+    margin-bottom: 10px;
+}

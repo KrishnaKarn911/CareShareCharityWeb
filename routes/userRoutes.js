@@ -12,7 +12,8 @@ router.post('/register', userController.createUser);
 router.get('/login', userController.loginPage);
 router.post('/login', userController.login);
 
-router.get('/userProfile', userController.getProfilePage)
+router.get('/profileData', authMiddleware.userAuthorisation,userController.getUserProfile)
+router.get('/profile', userController.getProfilePage);
 // router.post('/login', authController.login);
 // router.get('/profile', authMiddleware, authController.getProfile);
 // router.put('/profile', authMiddleware, authController.updateProfile);

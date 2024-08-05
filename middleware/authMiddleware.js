@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync')
 
 exports.userAuthorisation = catchAsync(async(req, res, next) => {
     try {
-        console.log(req);
+        
         let token = req.headers.authorization.split(" ")[1];
         console.log(token);
         if (!token) {

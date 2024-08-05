@@ -52,17 +52,17 @@
 
 
         const UserRegbtn = document.getElementById('donarRegisterBtn');
-        const CharityRegbtn = document.getElementById('donarRegisterBtn');
+        const CharityRegbtn = document.getElementById('charityRegisterBtn');
         const logo = document.getElementById('logo');
 
         UserRegbtn.addEventListener('click',()=>{
             window.location.href='http://localhost:3000/charitylife/user/register'
         })
-        
 
-       logo.addEventListener('click', () => {
-                window.location.href('http://localhost:3000/charitylife/');
-            })
+        CharityRegbtn.addEventListener('click',()=>{
+            window.location.href='http://localhost:3000/charitylife/charity/register'
+        })
+        
     </script>
 
 </body>

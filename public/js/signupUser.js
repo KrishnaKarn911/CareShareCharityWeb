@@ -2,11 +2,11 @@ const form = document.getElementById('signup');
 
 form.addEventListener('submit', async(e)=>{
     e.preventDefault();
-    
-    const name=document.getElementById('name').value;
-    const email=document.getElementById('email').value;
-    const password=document.getElementById('password').value;
-    const confirmPassword=document.getElementById('confirm-password').value;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const isAdmin = document.getElementById('admin').checked;
 
    
     const messageElement = document.getElementById('message');
@@ -25,7 +25,8 @@ form.addEventListener('submit', async(e)=>{
         const response = await axios.post('http://localhost:3000/charitylife/user/register', {
             name: name,
             email: email,
-            password: password
+            password: password,
+            isAdmin: isAdmin
         });
         console.log(response);
 

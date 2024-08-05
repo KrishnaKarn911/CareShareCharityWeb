@@ -42,6 +42,10 @@ const User = sequelize.define('User', {
     },
     passwordResetToken: DataTypes.STRING,
     passwordResetExpires: DataTypes.DATE,
+    isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    }
 }, {
     hooks: {
         beforeSave: async (user) => {

@@ -1,0 +1,97 @@
+
+
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    background-color: #060afc;
+    padding: 10px;
+}
+
+.navbar img {
+    height: 50px;
+    margin-right: 20px;
+}
+
+.navbar h1 {
+    color: white;
+    margin: 0;
+}
+
+.container-fluid {
+    height: calc(100vh - 70px);
+}
+
+.row {
+    height: 100%;
+}
+
+.left-image {
+    background-image: url('/images/charity1.jpg');
+    /* Placeholder image */
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+}
+
+.signup-form {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.signup-form .form-group {
+    margin-bottom: 15px;
+}
+
+.signup-form .form-control {
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.signup-form .btn-primary {
+    border-radius: 4px;
+}
+
+.signup-form .d-flex {
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.signup-form .d-flex a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.signup-form .d-flex a:hover {
+    text-decoration: underline;
+}
+
+.signup-form .error {
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
