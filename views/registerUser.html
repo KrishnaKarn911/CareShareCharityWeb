@@ -21,10 +21,14 @@
             <div class="col-md-6 left-image d-none d-md-block"></div>
             <div class="col-md-6 d-flex align-items-center justify-content-center">
                 <div class="signup-form">
-                    <h2>Donor Login</h2>
-
+                    <h2>Donor Signup</h2>
+                   
                     <p id="message" class="error"></p>
-                    <form id="login">
+                    <form id="signup">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name" required />
+                        </div>
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" placeholder="Enter your email"
@@ -35,10 +39,14 @@
                             <input type="password" class="form-control" id="password" placeholder="Enter your password"
                                 required />
                         </div>
-                       
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirm-password"
+                                placeholder="Confirm your password" required />
+                        </div>
                         <div class="d-flex justify-content-center mb-3">
-                            <a href="http://localhost:3000/charitylife/user/register">Register</a>
-                            <p>New User?</p>
+                            <a href="http://localhost:3000/user/login">Login</a>
+                            <p>Already have an account?</p>
                         </div>
                         <button id="submit" type="submit" class="btn btn-primary btn-block">Sign Up</button>
                     </form>
@@ -46,12 +54,14 @@
             </div>
         </div>
     </div>
-    <script src="/js/loginUser.js"></script>
+    <script src="/js/signupUser.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-   
+    <script>
+
+    </script>
 </body>
 
 </html>

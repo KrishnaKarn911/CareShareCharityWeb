@@ -4,16 +4,22 @@ const authRoutes = require('./routes/authRoutes');
 const charityRoutes = require('./routes/charityRoutes');
 const donationRoutes = require('./routes/donationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const sequelize = require('./config/db');
+const userRoutes = require('./routes/userRoutes');
+const sequelize = require('./config/database');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/charity', charityRoutes);
-app.use('/api/donation', donationRoutes);
-app.use('/api/admin', adminRoutes);
+
+app.use('/charitylife', authRoutes);
+app.use('/charitylife/user', userRoutes);
+app.use('/charitylife/charity', charityRoutes);
+// app.use('/api/charity', charityRoutes);
+// app.use('/api/donation', donationRoutes);
+// app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 3000;
 

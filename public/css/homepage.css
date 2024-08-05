@@ -1,41 +1,90 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
+ body {
+     margin: 0;
+     font-family: Arial, sans-serif;
+ }
 
-nav {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-}
+ .navbar {
+     display: flex;
+     align-items: center;
+     background-color: #060afc;
+     padding: 10px;
+ }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-}
+ .navbar img {
+     height: 50px;
+     margin-right: 20px;
+ }
 
-nav ul li {
-    display: inline;
-    margin-right: 10px;
-}
+ .navbar h1 {
+     color: white;
+     margin: 0;
+ }
 
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
+ .container {
+     display: flex;
+     height: calc(100vh - 70px);
+ }
 
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+ .left {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     background-color: #aaf1ca;
+     padding: 20px;
+     background-image: url("/images/charity.jpg");
+     background-size: contain;
+     /* Fit the image within the container */
+     background-position: center;
+     background-repeat: no-repeat;
+ }
 
-h2,
-h3 {
-    color: #333;
-}
+ .homeBtn {
+     width: 200px;
+     padding: 15px;
+     margin: 10px;
+     font-size: 16px;
+     cursor: pointer;
+     border: none;
+     background-color: #5242e9;
+     color: white;
+     border-radius: 10px;
+     transition: background-color 0.3s, transform 0.3s;
+    
+ }
+
+ .homeBtn {
+     background-color: #3d3d9f;
+    
+     transform: scale(1.05);
+    
+ }
+
+ .right {
+     flex: 2;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     overflow: hidden;
+     position: relative;
+ }
+
+ .slideshow-container {
+     position: relative;
+     width: 100%;
+     height: 100%;
+ }
+
+ .slide {
+     display: none;
+     position: absolute;
+     width: 100%;
+     height: 100%;
+ }
+
+ .slide img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+ }

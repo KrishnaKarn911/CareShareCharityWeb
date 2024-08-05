@@ -1,11 +1,9 @@
-const registerBtn=document.querySelector('.register-btn');
-const loginBtn=document.querySelector('.login-btn');
+
+const logo=document.getElementById('logo');
 
 
-registerBtn.addEventListener('click',(e)=>{
-    window.location.href='http://localhost:3000/UserOrAdmin';
-})
 
-loginBtn.addEventListener('click',(e)=>{
-    window.location.href('http://localhost:3000/userOrAdmin');
+
+logo.addEventListener('click',()=>{
+    window.location.href('http://localhost:3000/charitylife/');
 })

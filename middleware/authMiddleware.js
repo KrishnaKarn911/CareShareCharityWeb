@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const catchAsync = require('../utils/catchAsync')
 
-
-exports.userAuthorisation = async(req, res, next) => {
+exports.userAuthorisation = catchAsync(async(req, res, next) => {
     try {
+        console.log(req);
         let token = req.headers.authorization.split(" ")[1];
         console.log(token);
         if (!token) {
@@ -27,4 +28,4 @@ exports.userAuthorisation = async(req, res, next) => {
             message: "Unauthorized user... Try login again"
         });
     }
-};
+});

@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 const path=require('path');
 
 
-
 const signToken = (id,name) => {
     return jwt.sign({ id: id, name: name}, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN
@@ -14,11 +13,17 @@ const signToken = (id,name) => {
 };
 
 
-exports.homepage = (req,res)=>{
-    res.status(200).sendFile(path.join(__dirname,'..', 'views', 'homepage.html'))
+exports.register = (req,res)=>{
+    res.status(200).sendFile(path.join(__dirname,'..', 'views', 'registerUser.html'))
+}  
+
+exports.loginPage = (req,res)=>{
+    res.status(200).sendFile(path.join(__dirname,'..', 'views', 'login.html'))
 }
 
-exports.register = catchAsync(async (req, res) => {
+
+exports.createUser = catchAsync(async (req, res) => {
+
 
     //check if user exist already
     const ifUserExist = await User.findOne({where:{email:req.body.email}});
@@ -34,7 +39,6 @@ exports.register = catchAsync(async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        confirmPassword: req.body.confirmPassword
     });
 
 
@@ -48,6 +52,7 @@ exports.register = catchAsync(async (req, res) => {
         }
     });
 });
+
 
 exports.login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
@@ -79,24 +84,10 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 
-exports.getProfile = async (req, res) => {
-  try {
-    const user = await User.findByPk(req.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+exports.getProfilePage = (req,res)=>{
+     res.status(200).sendFile(path.join(__dirname,'..', 'views', 'profile.html'))
+}
 
-    res.json({ id: user.id, username: user.username, email: user.email });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 
-exports.updateProfile = async (req, res) => {
-  const { username, email } = req.body;
 
-  try {
-    await User.update({ username, email }, { where: { id: req.user.id } });
-    res.json({ message: 'Profile updated successfully!' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+
