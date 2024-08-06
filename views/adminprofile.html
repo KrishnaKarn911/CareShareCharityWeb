@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Profile</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/css/adminDashboard.css">;
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/adminDashboard.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
@@ -33,7 +33,34 @@
         const socket = io('http://localhost:3000'); // Connect to the server
 
         socket.on('charityRegistered', (data) => {
-            console.log('New Charity Registered');
+            addNotification(data);
+        });
+
+        document.addEventListener('DOMContentLoaded', async() => {
+            try{
+                const response = await axios.get('http://localhost:3000/charitylife/charity/pending')
+                console.log(response);
+                if(response.status===200){
+                    response.data.forEach(charity=>addNotification(charity));
+                }else{
+                    alert('Server Error, try after sometime');
+                    console.log('Something went wrong')
+                }
+            }catch(err){
+                console.log(err);
+            }
+
+            // fetch('/charitylife/admin/pendingCharities')
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         if (data.status === 'success') {
+            //             data.data.pendingCharities.forEach(charity => addNotification(charity));
+            //         }
+            //     })
+            //     .catch(err => console.error(err));
+        });
+
+        function addNotification(data) {
             const notifications = document.getElementById('notifications');
             const notification = document.createElement('div');
             notification.classList.add('alert', 'alert-info', 'notification');
@@ -44,13 +71,14 @@
                 <button class="btn btn-danger" onclick="rejectCharity(${data.id})">Reject</button>
             `;
             notifications.appendChild(notification);
-        });
+        }
 
         function approveCharity(id) {
             fetch(`/charitylife/admin/approveCharity/${id}`, { method: 'POST' })
                 .then(response => response.json())
                 .then(data => {
                     alert('Charity approved successfully');
+                    location.reload(); // Reload to update the list of pending charities
                 })
                 .catch(err => console.error(err));
         }
@@ -60,6 +88,7 @@
                 .then(response => response.json())
                 .then(data => {
                     alert('Charity rejected successfully');
+                    location.reload(); // Reload to update the list of pending charities
                 })
                 .catch(err => console.error(err));
         }
@@ -69,6 +98,8 @@
             window.location.href = 'http://localhost:3000/charitylife/user/login'; // Adjust the URL as needed
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

@@ -4,6 +4,12 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const bcrypt = require('bcrypt');
 const path=require('path');
+const Order=require('../models/Order');
+
+const Razorpay = require('razorpay');
+
+
+
 
 
 const signToken = (id,name) => {
@@ -112,6 +118,92 @@ exports.getUserProfile = catchAsync(async (req, res) => {
         }
     });
 });
+
+
+
+exports.createOrder = async (req, res) => {
+    try {
+        const Razorpay = require('razorpay');
+        const instance = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET,
+        });
+        const userId = req.user.id;
+        const { charityId, amount } = req.body;
+        const options = {
+            amount: amount * 100,  // amount in the smallest currency unit
+            currency: "INR",
+            receipt: "order_rcptid_11"
+        };
+
+        instance.orders.create(options, async (err, order) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    message: "Failed to create Razorpay order",
+                    error: err
+                });
+            }
+
+            try {
+                await Order.create({
+                    orderId: order.id,
+                    status: "PENDING",
+                    userId: userId,
+                    charityId: charityId,
+                    amount: amount,
+                    payment_id: order.id,
+                });
+
+                return res.status(201).json({
+                    order,
+                    key_id: instance.key_id
+                });
+            } catch (err) {
+                console.error(err);
+                return res.status(500).json({
+                    message: "Failed to save order in the database",
+                    error: err
+                });
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            message: "Something went wrong",
+            error: err
+        });
+    }
+};
+
+
+
+
+exports.updateDonation = (req, res) => {
+    const { payment_id, order_id, charityId, userId, amount } = req.body;
+
+    Order.findOne({ where: { orderId: order_id } }).then(order => {
+        order.update({ paymentId: payment_id, status: "SUCCESSFUL", charityId: charityId, userId: userId, amount: amount }).then(() => {
+            return res.status(201).json({
+                status: "success",
+                message: "Transaction successfully completed",
+            });
+        }).catch(err => {
+            return res.status(500).json({
+                status: "failed",
+                message: "Something went wrong",
+                err
+            });
+        });
+    }).catch(err => {
+        return res.status(500).json({
+            status: "failed",
+            message: "Something went wrong",
+            err
+        });
+    });
+};
+
 
 
 

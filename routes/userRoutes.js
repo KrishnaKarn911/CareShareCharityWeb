@@ -14,6 +14,10 @@ router.post('/login', userController.login);
 
 router.get('/profileData', authMiddleware.userAuthorisation,userController.getUserProfile)
 router.get('/profile', userController.getProfilePage);
+
+
+router.post('/createOrder',authMiddleware.userAuthorisation, userController.createOrder );
+router.post('/updateDonation',userController.updateDonation);
 // router.post('/login', authController.login);
 // router.get('/profile', authMiddleware, authController.getProfile);
 // router.put('/profile', authMiddleware, authController.updateProfile);

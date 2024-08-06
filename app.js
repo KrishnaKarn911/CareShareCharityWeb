@@ -10,6 +10,8 @@ const Charity=require('./models/charity');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
+const Order = require('./models/Order');
+const User = require('./models/user');
 require('dotenv').config();
 
 
@@ -25,6 +27,9 @@ app.use('/charitylife/user', userRoutes);
 app.use('/charitylife/admin', adminRoutes);
 app.use('/charitylife/charity', charityRoutes);
 
+User.hasMany(Order, {foreignKey: 'userId', onDelete: 'CASCADE'});
+Order.belongsTo(User,{foreignKey:"userId", onDelete: 'CASCADE'});
+
 io.on('connection', (socket) => {
     console.log('A user connected', socket.id);
 
@@ -36,10 +41,11 @@ io.on('connection', (socket) => {
 
 app.post('/charitylife/charity/register', (async (req, res) => {
     console.log(req.body);
-    console.log(io);
     const newCharity = await Charity.create({
         name: req.body.name,
         description: req.body.description,
+        email: req.body.email,
+        password: req.body.password,
         approved: false
     });
 
@@ -60,7 +66,7 @@ app.post('/charitylife/charity/register', (async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-sequelize.sync().then(() => {
+sequelize.sync({alter:true}).then(() => {
   server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
