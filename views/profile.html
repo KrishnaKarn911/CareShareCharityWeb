@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,8 +15,8 @@
         <img src="/images/preview.jpg" alt="Logo" class="navbar-brand" style="height: 50px;">
         <h1 class="navbar-brand">CharityLife</h1>
         <div class="navbar-nav ml-auto">
-            <a class="nav-link" href="http://localhost:3000/charitylife/user/donations"
-                style="color: white;">Donations</a>
+            <a class="nav-link" id="dashboardLink" href="javascript:void(0);" style="color: white;">Dashboard</a>
+            <a class="nav-link" id="donationsLink" href="javascript:void(0);" style="color: white;">Donations</a>
             <button type="button" id="logoutBtn" class="btn btn-dark">Logout</button>
         </div>
     </div>
@@ -25,6 +24,24 @@
     <div class="container mt-4">
         <div class="row" id="charitiesGrid">
             <!-- Charities will be loaded here -->
+        </div>
+        <div class="row" id="donationsSection" style="display: none;">
+            <div class="col-12">
+                <h2>Your Donations</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Charity Name</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="donationsTable">
+                        <!-- Donations will be loaded here -->
+                    </tbody>
+                </table>
+                <button id="downloadJsonBtn" class="btn btn-primary">Download as JSON</button>
+            </div>
         </div>
     </div>
 
@@ -36,12 +53,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         document.getElementById('logoutBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('tokenCharity');
-            window.location.href = 'http://localhost:3000/charitylife/user/login';
-        });
+                e.preventDefault();
+                localStorage.removeItem('tokenCharity');
+                window.location.href = 'http://localhost:3000/charitylife/user/login';
+            });
 
-        document.addEventListener('DOMContentLoaded', () => {
+            document.addEventListener('DOMContentLoaded', () => {
                 const token = localStorage.getItem('tokenCharity');
 
                 if (!token) {
@@ -50,37 +67,98 @@
                     return;
                 }
 
-                axios.get('/charitylife/charity', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                    .then(response => {
-                        const charities = response.data;
-                        const grid = document.getElementById('charitiesGrid');
+                loadCharities(token);
 
-                        charities.forEach(charity => {
-                            const charityCard = document.createElement('div');
-                            charityCard.className = 'col-md-4 mb-4';
-                            charityCard.innerHTML =
-                                `<div class="card">
-                    <img src="${charity.image}" class="card-img-top" alt="${charity.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${charity.name}</h5>
-                         <p class="card-text">${charity.description}</p>
-                        <input type="number" class="form-control mb-2" placeholder="Enter amount to donate" id="donateAmount${charity.id}">
-                        <button class="btn btn-primary" onclick="donate(${charity.id})">Donate</button>
-                    </div>
+                document.getElementById('dashboardLink').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('dashboardLink').classList.add('active');
+                    document.getElementById('donationsLink').classList.remove('active');
+                    document.getElementById('charitiesGrid').style.display = 'flex';
+                    document.getElementById('donationsSection').style.display = 'none';
+                });
 
-                </div>`;
-                            grid.appendChild(charityCard);
-                        });
-                    })
-                    .catch(error => console.error(error));
+                document.getElementById('donationsLink').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('donationsLink').classList.add('active');
+                    document.getElementById('dashboardLink').classList.remove('active');
+                    document.getElementById('charitiesGrid').style.display = 'none';
+                    document.getElementById('donationsSection').style.display = 'block';
+                    loadDonations(token);
+                });
             });
 
+            async function loadCharities(token) {
+                try {
+                    const response = await axios.get('/charitylife/charity', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    const charities = response.data;
+                    const grid = document.getElementById('charitiesGrid');
+                    grid.innerHTML = '';
+
+                    charities.forEach(charity => {
+                        const charityCard = document.createElement('div');
+                        charityCard.className = 'col-md-4 mb-4';
+                        charityCard.innerHTML = `
+                        <div class="card">
+                            <img src="${charity.image}" class="card-img-top" alt="${charity.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${charity.name}</h5>
+                                <p class="card-text">${charity.description}</p>
+                                <input type="number" class="form-control mb-2" placeholder="Enter amount to donate" id="donateAmount-${charity.id}">
+                                <button class="btn btn-primary" onclick="donate(${charity.id})">Donate</button>
+                            </div>
+                        </div>`;
+                        grid.appendChild(charityCard);
+                    });
+                } catch (error) {
+                    console.error('Error loading charities:', error);
+                }
+            }
+
+            async function loadDonations(token) {
+                try {
+                    const response = await axios.get('http://localhost:3000/charitylife/user/donations', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    const donations = response.data;
+                    const donationsTable = document.getElementById('donationsTable');
+                    donationsTable.innerHTML = '';
+
+                    donations.forEach(donation => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${donation.charityName}</td>
+                        <td>${donation.amount}</td>
+                        <td>${new Date(donation.date).toLocaleDateString()}</td>`;
+                        donationsTable.appendChild(row);
+                    });
+
+                    document.getElementById('downloadJsonBtn').addEventListener('click', () => {
+                        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(donations));
+                        const downloadAnchorNode = document.createElement('a');
+                        downloadAnchorNode.setAttribute("href", dataStr);
+                        downloadAnchorNode.setAttribute("download", "donations.json");
+                        document.body.appendChild(downloadAnchorNode); // required for firefox
+                        downloadAnchorNode.click();
+                        downloadAnchorNode.remove();
+                    });
+
+                } catch (error) {
+                    console.error('Error loading donations:', error);
+                }
+            }
+
+
+
         async function donate(charityId) {
-                let amountElement = document.getElementById(`donateAmount${charityId}`);
+                let amountElement = document.getElementById(`donateAmount-${charityId}`);
                 let amount = amountElement.value;
                 
                 const token = localStorage.getItem('tokenCharity');
@@ -151,7 +229,7 @@
                 } catch (error) {
                     console.error('Error creating order:', error);
                 }
-            }
+            } 
 
 
             function parseJwt(token) {

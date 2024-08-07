@@ -30,6 +30,10 @@ app.use('/charitylife/charity', charityRoutes);
 User.hasMany(Order, {foreignKey: 'userId', onDelete: 'CASCADE'});
 Order.belongsTo(User,{foreignKey:"userId", onDelete: 'CASCADE'});
 
+
+Order.belongsTo(Charity, { foreignKey: 'charityId' });
+Charity.hasMany(Order, { foreignKey: 'charityId' });
+
 io.on('connection', (socket) => {
     console.log('A user connected', socket.id);
 
@@ -66,7 +70,7 @@ app.post('/charitylife/charity/register', (async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-sequelize.sync({alter:true}).then(() => {
+sequelize.sync().then(() => {
   server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });

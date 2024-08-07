@@ -36,7 +36,7 @@ exports.charityAuthorisation = catchAsync(async(req, res, next) => {
     try {
         
         let token = req.headers.authorization.split(" ")[1];
-        console.log(token);
+        console.log(" In charity middleware:" , token);
         if (!token) {
             return res.status(401).json({
                 status: "fail",
