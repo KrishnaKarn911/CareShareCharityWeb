@@ -3,7 +3,7 @@ form.addEventListener('submit',async(e)=>{
    e.preventDefault();
 
     try {
-        const response = await axios.post('http://localhost:3000/charitylife/charity/login', {
+        const response = await axios.post('http://65.2.126.107:3000/charitylife/charity/login', {
             email: document.getElementById('email').value,
             password: document.getElementById('password').value
         });
@@ -14,10 +14,10 @@ form.addEventListener('submit',async(e)=>{
 
         
         if (response.data.status==='success') {
-            window.location.href = "http://localhost:3000/charitylife/charity/profile";
+            window.location.href = "http://65.2.126.107:3000/charitylife/charity/profile";
         } else {
             alert('Something went wrong, try again later');
-            window.location.href = "http://localhost:3000/charitylife/charity/login";
+            window.location.href = "http://65.2.126.107:3000/charitylife/charity/login";
         }
     } catch (err) {
         console.log(err);

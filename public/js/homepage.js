@@ -5,7 +5,7 @@ const logo=document.getElementById('logo');
 
 
 logo.addEventListener('click',()=>{
-    window.location.href('http://localhost:3000/charitylife/');
+    window.location.href('http://65.2.126.107:3000/charitylife/');
 })
 
  let slideIndex = 0;
@@ -26,9 +26,9 @@ logo.addEventListener('click',()=>{
 
 
         UserRegbtn.addEventListener('click',()=>{
-            window.location.href='http://localhost:3000/charitylife/user/register'
+            window.location.href='http://65.2.126.107:3000/charitylife/user/register'
         })
 
         CharityRegbtn.addEventListener('click',()=>{
-            window.location.href='http://localhost:3000/charitylife/charity/register'
+            window.location.href='http://65.2.126.107:3000/charitylife/charity/register'
         })

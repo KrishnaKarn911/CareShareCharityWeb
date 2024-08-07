@@ -1,6 +1,6 @@
 var token = localStorage.getItem('tokenCharity');
 
-const socket = io('http://localhost:3000'); 
+const socket = io('http://65.2.126.107:3000'); 
 
         socket.on('charityRegistered', (data) => {
             addNotification(data);
@@ -8,7 +8,7 @@ const socket = io('http://localhost:3000');
 
         document.addEventListener('DOMContentLoaded', async() => {
             try{
-                const response = await axios.get('http://localhost:3000/charitylife/charity/pending')
+                const response = await axios.get('http://65.2.126.107:3000/charitylife/charity/pending')
                 console.log(response);
                 if(response.status===200){
                     response.data.forEach(charity=>addNotification(charity));
@@ -56,7 +56,7 @@ const socket = io('http://localhost:3000');
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
             localStorage.removeItem('tokenCharity');
-            window.location.href = 'http://localhost:3000/charitylife/user/login'; 
+            window.location.href = 'http://65.2.126.107:3000/charitylife/user/login'; 
         });
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -80,7 +80,7 @@ const socket = io('http://localhost:3000');
 
     async function loadUsers() {
         try {
-            const response = await axios.get('http://localhost:3000/charitylife/user/',{
+            const response = await axios.get('http://65.2.126.107:3000/charitylife/user/',{
             headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -94,7 +94,7 @@ const socket = io('http://localhost:3000');
 
     async function loadCharities() {
          try {
-            const response = await axios.get('http://localhost:3000/charitylife/charity/',{
+            const response = await axios.get('http://65.2.126.107:3000/charitylife/charity/',{
             headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -108,7 +108,7 @@ const socket = io('http://localhost:3000');
 
     async function loadDonations() {
         try {
-            const response = await axios.get('http://localhost:3000/charitylife/admin/allDonations',{
+            const response = await axios.get('http://65.2.126.107:3000/charitylife/admin/allDonations',{
             headers: {
                         'Authorization': `Bearer ${token}`
                     }
