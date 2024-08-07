@@ -7,6 +7,7 @@ const path=require('path');
 const  Order = require('../models/Order');
 const Charity = require('../models/charity')
 const sendEmail=require('./../utils/sendMail');
+const {Sequelize, Op} = require('sequelize');
 
 const Razorpay = require('razorpay');
 
@@ -258,6 +259,26 @@ exports.getUserDonations = async (req, res) => {
     }
 };
 
+
+
+exports.getAllUsers = catchAsync(async (req, res) => {
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({
+            status: "fail",
+            message: "Unauthorized User"
+        });
+    }
+
+    const users = await User.findAll({
+        attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
+        where: {
+            id: { [Sequelize.Op.ne]: user.id } // Exclude the current user
+        }
+    });
+
+    res.status(200).json({ users });
+});
 
 
 

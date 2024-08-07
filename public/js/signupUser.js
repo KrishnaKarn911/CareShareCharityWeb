@@ -1,4 +1,12 @@
 const form = document.getElementById('signup');
+const logo=document.getElementById('logo');
+
+
+
+
+logo.addEventListener('click',()=>{
+    window.location.href='http://localhost:3000/charitylife/';
+})
 
 form.addEventListener('submit', async(e)=>{
     e.preventDefault();

@@ -30,7 +30,10 @@ exports.getCharityProfilePage=(req,res)=>{
 
 exports.getCharities = async (req, res) => {
     try {
-        const charities = await Charity.findAll({ where: { approved: true } });
+        const charities = await Charity.findAll({
+            where: { approved: true },
+            attributes: ['id', 'name', 'email','description', 'approved', 'image','createdAt', 'updatedAt'] 
+        });
         res.status(200).json(charities);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -133,4 +136,6 @@ exports.getCharityDonations = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching charity donations.' });
     }
 };
+
+
 

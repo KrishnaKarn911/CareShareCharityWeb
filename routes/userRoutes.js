@@ -15,7 +15,7 @@ router.post('/login', userController.login);
 router.get('/profileData', authMiddleware.userAuthorisation,userController.getUserProfile)
 router.get('/profile', userController.getProfilePage);
 
-
+router.get('/', authMiddleware.userAuthorisation, userController.getAllUsers )
 router.get('/donations',authMiddleware.userAuthorisation, userController.getUserDonations);
 
 
