@@ -13,12 +13,16 @@ const socketIo = require('socket.io');
 const Order = require('./models/Order');
 const User = require('./models/user');
 require('dotenv').config();
-
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+app.use(cors({
+    origin: '*',
+    optionsSuccessStatus: 200
+}))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
