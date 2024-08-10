@@ -1,65 +1,73 @@
 var token = localStorage.getItem('tokenCharity');
 
-const socket = io('http://65.2.126.107:3000'); 
 
-        socket.on('charityRegistered', (data) => {
-            addNotification(data);
-        });
+//It will handle realtime notification on approval and rejection of charity registration
+const socket = io('http://43.205.236.91:3000'); 
 
-        document.addEventListener('DOMContentLoaded', async() => {
-            try{
-                const response = await axios.get('http://65.2.126.107:3000/charitylife/charity/pending')
-                console.log(response);
-                if(response.status===200){
-                    response.data.forEach(charity=>addNotification(charity));
-                }else{
-                    alert('Server Error, try after sometime');
-                    console.log('Something went wrong')
-                }
-            }catch(err){
-                console.log(err);
+socket.on('charityRegistered', (data) => {
+     addNotification(data);
+});
+
+document.addEventListener('DOMContentLoaded', async() => {
+     try{
+        const response = await axios.get('http://43.205.236.91:3000/charitylife/charity/pending')
+        console.log(response);
+        if(response.status===200){
+        response.data.forEach(charity=>addNotification(charity));
+        }
+        else
+            {
+              alert('Server Error, try after sometime');
+              console.log('Something went wrong')
             }
-        });
+        }catch(err){
+                console.log(err);
+         }
+});
 
-        function addNotification(data) {
-            const notifications = document.getElementById('notifications');
-            const notification = document.createElement('div');
-            notification.classList.add('alert', 'alert-info', 'notification');
-            notification.innerHTML = `
+function addNotification(data) {
+    const notifications = document.getElementById('notifications');
+    const notification = document.createElement('div');
+    notification.classList.add('alert', 'alert-info', 'notification');
+    notification.innerHTML = `
                 <strong>New Charity Registered:</strong>
                 <p><b>${data.name}</b>: ${data.description}</p>
                 <button class="btn btn-success me-2" onclick="approveCharity(${data.id})">Approve</button>
                 <button class="btn btn-danger" onclick="rejectCharity(${data.id})">Reject</button>
             `;
-            notifications.appendChild(notification);
-        }
+    notifications.appendChild(notification);
+}
 
-        function approveCharity(id) {
-            fetch(`/charitylife/admin/approveCharity/${id}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Charity approved successfully');
-                    location.reload(); 
-                })
-                .catch(err => console.error(err));
-        }
+function approveCharity(id) {
+    fetch(`/charitylife/admin/approveCharity/${id}`, { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+            alert('Charity approved successfully');
+            location.reload(); 
+        })
+        .catch(err => console.error(err));
+}
 
-        function rejectCharity(id) {
-            fetch(`/charitylife/admin/rejectCharity/${id}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Charity rejected successfully');
-                    location.reload(); 
-                })
-                .catch(err => console.error(err));
-        }
 
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('tokenCharity');
-            window.location.href = 'http://65.2.126.107:3000/charitylife/user/login'; 
-        });
 
-    document.addEventListener('DOMContentLoaded', function() {
+function rejectCharity(id) {
+    fetch(`/charitylife/admin/rejectCharity/${id}`, { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+                alert('Charity rejected successfully');
+                location.reload(); 
+            })
+            .catch(err => console.error(err));
+}
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('tokenCharity');
+    window.location.href = 'http://43.205.236.91:3000/charitylife/user/login'; 
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('userLink').addEventListener('click', loadUsers);
     document.getElementById('charityLink').addEventListener('click', loadCharities);
     document.getElementById('donationsLink').addEventListener('click', loadDonations);
@@ -67,26 +75,16 @@ const socket = io('http://65.2.126.107:3000');
         location.reload(); 
     })
 
-    let deleteId = null;
-    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-
-    confirmDeleteBtn.addEventListener('click', function() {
-        if (deleteId) {
-            deleteItem(deleteId);
-            deleteModal.hide();
-        }
-    });
 
     async function loadUsers() {
         try {
-            const response = await axios.get('http://65.2.126.107:3000/charitylife/user/',{
+            const response = await axios.get('http://43.205.236.91:3000/charitylife/user/',{
             headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 })
-            console.log(response.data.users)
-        displayTable(response.data.users, 'Users');
+            console.log(response.data)
+        displayTable(response.data, 'user');
         } catch (error) {
             console.log(error);
         }
@@ -94,13 +92,13 @@ const socket = io('http://65.2.126.107:3000');
 
     async function loadCharities() {
          try {
-            const response = await axios.get('http://65.2.126.107:3000/charitylife/charity/',{
+            const response = await axios.get('http://43.205.236.91:3000/charitylife/charity/',{
             headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 })
             console.log(response.data)
-        displayTable(response.data, 'Users');
+        displayTable(response.data, 'charity');
         } catch (error) {
             console.log(error);
         }
@@ -108,19 +106,20 @@ const socket = io('http://65.2.126.107:3000');
 
     async function loadDonations() {
         try {
-            const response = await axios.get('http://65.2.126.107:3000/charitylife/admin/allDonations',{
+            const response = await axios.get('http://43.205.236.91:3000/charitylife/admin/allDonations',{
             headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 })
             console.log(response.data)
-        displayTable(response.data, 'Users');
+        displayTable(response.data, 'donation');
         } catch (error) {
             console.log(error);
         }
     }
 
     function displayTable(data, type) {
+    console.log(data);
     const contentDiv = document.getElementById('content');
     contentDiv.innerHTML = '';
 
@@ -131,23 +130,24 @@ const socket = io('http://65.2.126.107:3000');
 
     const table = document.createElement('table');
     table.classList.add('table', 'table-striped');
-    
+
+    // Create table header
     const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
     const headerRow = document.createElement('tr');
 
+    // Dynamically create header cells based on keys in the first object
     const headers = Object.keys(data[0]);
     headers.forEach(header => {
         const th = document.createElement('th');
         th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
         headerRow.appendChild(th);
     });
-    
-    const th = document.createElement('th');
-    th.textContent = 'Actions';
-    headerRow.appendChild(th);
+
     thead.appendChild(headerRow);
     table.appendChild(thead);
+
+    // Create table body
+    const tbody = document.createElement('tbody');
 
     data.forEach(item => {
         const row = document.createElement('tr');
@@ -157,17 +157,6 @@ const socket = io('http://65.2.126.107:3000');
             row.appendChild(td);
         });
 
-        const actionTd = document.createElement('td');
-        const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('btn', 'btn-danger');
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.addEventListener('click', function() {
-            deleteId = item.id;
-            deleteModal.show();
-        });
-        actionTd.appendChild(deleteBtn);
-        row.appendChild(actionTd);
-
         tbody.appendChild(row);
     });
 
@@ -176,20 +165,4 @@ const socket = io('http://65.2.126.107:3000');
 }
 
 
-    function deleteItem(id) {
-        axios.delete(`/api/${type.toLowerCase()}/${id}`)
-            .then(response => {
-                // Refresh the list
-                if (type === 'Users') {
-                    loadUsers();
-                } else if (type === 'Charities') {
-                    loadCharities();
-                } else if (type === 'Donations') {
-                    loadDonations();
-                }
-            })
-            .catch(error => {
-                console.error('There was an error deleting the item!', error);
-            });
-    }
 });

@@ -21,6 +21,8 @@ router.get('/donations',authMiddleware.userAuthorisation, userController.getUser
 
 router.post('/createOrder',authMiddleware.userAuthorisation, userController.createOrder );
 router.post('/updateDonation',authMiddleware.userAuthorisation, userController.updateDonation);
+
+router.delete('/:id',authMiddleware.userAuthorisation, userController.deleteUser);
 // router.post('/login', authController.login);
 // router.get('/profile', authMiddleware, authController.getProfile);
 // router.put('/profile', authMiddleware, authController.updateProfile);

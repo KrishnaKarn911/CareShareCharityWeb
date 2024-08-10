@@ -75,7 +75,8 @@ exports.getAllOrders = async (req, res) => {
             charityName: order.Charity.name,
             amount: order.amount,
             createdAt: order.createdAt,
-            paymentId: order.paymentId
+            paymentId: order.paymentId,
+           
         }));
 
         res.status(200).json(formattedOrders);

@@ -5,7 +5,7 @@ const logo=document.getElementById('logo');
 
 
 logo.addEventListener('click',()=>{
-    window.location.href='http://65.2.126.107:3000/charitylife/';
+    window.location.href='http://43.205.236.91:3000/charitylife/';
 })
 
 form.addEventListener('submit', async(e)=>{
@@ -30,7 +30,7 @@ form.addEventListener('submit', async(e)=>{
     try {
 
             
-        const response = await axios.post('http://65.2.126.107:3000/charitylife/user/register', {
+        const response = await axios.post('http://43.205.236.91:3000/charitylife/user/register', {
             name: name,
             email: email,
             password: password,
@@ -42,7 +42,7 @@ form.addEventListener('submit', async(e)=>{
      
         if (response.status === 201) {
             alert('Successfully Registered');
-            window.location.href = 'http://65.2.126.107:3000/charitylife/user/login';
+            window.location.href = 'http://43.205.236.91:3000/charitylife/user/login';
         } else {
             messageElement.textContent = response.message;
             messageElement.style.display = 'block';

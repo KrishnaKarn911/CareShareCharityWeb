@@ -3,7 +3,7 @@ form.addEventListener('submit',async(e)=>{
    e.preventDefault();
 
     try {
-        const response = await axios.post('http://65.2.126.107:3000/charitylife/user/login', {
+        const response = await axios.post('http://43.205.236.91:3000/charitylife/user/login', {
             email: document.getElementById('email').value,
             password: document.getElementById('password').value
         });
@@ -12,7 +12,7 @@ form.addEventListener('submit',async(e)=>{
 
         localStorage.setItem('tokenCharity', response.data.token);
 
-        const userProfileResponse = await axios.get('http://65.2.126.107:3000/charitylife/user/profileData', {
+        const userProfileResponse = await axios.get('http://43.205.236.91:3000/charitylife/user/profileData', {
             headers: { "Authorization": `Bearer ${response.data.token}` }
         });
 
@@ -20,9 +20,9 @@ form.addEventListener('submit',async(e)=>{
         console.log(userProfileResponse.data);
 
         if (userProfileResponse.data.data.isAdmin) {
-            window.location.href = "http://65.2.126.107:3000/charitylife/admin/profile";
+            window.location.href = "http://43.205.236.91:3000/charitylife/admin/profile";
         } else {
-            window.location.href = "http://65.2.126.107:3000/charitylife/user/profile";
+            window.location.href = "http://43.205.236.91:3000/charitylife/user/profile";
         }
     } catch (err) {
         console.log(err);
@@ -40,5 +40,5 @@ const logo=document.getElementById('logo');
 
 
 logo.addEventListener('click',()=>{
-    window.location.href='http://65.2.126.107:3000/charitylife/';
+    window.location.href='http://43.205.236.91:3000/charitylife/';
 })

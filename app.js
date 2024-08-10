@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const charityRoutes = require('./routes/charityRoutes');
-const donationRoutes = require('./routes/donationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes');
 const sequelize = require('./config/database');
@@ -30,6 +29,7 @@ app.use('/charitylife', authRoutes);
 app.use('/charitylife/user', userRoutes);
 app.use('/charitylife/admin', adminRoutes);
 app.use('/charitylife/charity', charityRoutes);
+
 
 User.hasMany(Order, {foreignKey: 'userId', onDelete: 'CASCADE'});
 Order.belongsTo(User,{foreignKey:"userId", onDelete: 'CASCADE'});

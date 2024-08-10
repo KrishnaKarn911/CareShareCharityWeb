@@ -277,9 +277,29 @@ exports.getAllUsers = catchAsync(async (req, res) => {
         }
     });
 
-    res.status(200).json({ users });
+    res.status(200).json(users);
 });
 
+
+exports.deleteUser =  async(req,res)=>{
+    const user = req.user;
+    const id=req.params.id;
+    if(!user){
+        res.status(401).json({
+            status: "fail",
+            message:"Unauthorised user"
+        })
+    }
+    try{
+        const deletedUser = await User.destroy({where:{id:id}});
+        res.status(200).json({
+            status:"success",
+            deletedUser
+        })
+    }catch(err){
+        res.json({err});
+    }
+}
 
 
 

@@ -3,7 +3,7 @@
 document.getElementById('logoutBtn').addEventListener('click', (e) => {
                 e.preventDefault();
                 localStorage.removeItem('tokenCharity');
-                window.location.href = 'http://65.2.126.107:3000/charitylife/user/login';
+                window.location.href = 'http://43.205.236.91:3000/charitylife/user/login';
             });
 
             document.addEventListener('DOMContentLoaded', () => {
@@ -11,7 +11,7 @@ document.getElementById('logoutBtn').addEventListener('click', (e) => {
 
                 if (!token) {
                     alert("No token found, please login first.");
-                    window.location.href = "http://65.2.126.107:3000/charitylife/user/login";
+                    window.location.href = "http://43.205.236.91:3000/charitylife/user/login";
                     return;
                 }
 
@@ -69,7 +69,7 @@ document.getElementById('logoutBtn').addEventListener('click', (e) => {
 
             async function loadDonations(token) {
                 try {
-                    const response = await axios.get('http://65.2.126.107:3000/charitylife/user/donations', {
+                    const response = await axios.get('http://43.205.236.91:3000/charitylife/user/donations', {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -120,7 +120,7 @@ document.getElementById('logoutBtn').addEventListener('click', (e) => {
                 }
 
                 try {
-                    const response = await axios.post('http://65.2.126.107:3000/charitylife/user/createOrder', {
+                    const response = await axios.post('http://43.205.236.91:3000/charitylife/user/createOrder', {
                         charityId: charityId,
                         amount: amount
                     }, {
@@ -134,7 +134,7 @@ document.getElementById('logoutBtn').addEventListener('click', (e) => {
                         "name": "Donation",
                         "order_id": response.data.order.id,
                         "handler": async function (response) {
-                            await axios.post('http://65.2.126.107:3000/charitylife/user/updateDonation', {
+                            await axios.post('http://43.205.236.91:3000/charitylife/user/updateDonation', {
                                 payment_id: response.razorpay_payment_id,
                                 order_id: response.razorpay_order_id,
                                 signature: response.razorpay_signature,

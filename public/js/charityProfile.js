@@ -1,18 +1,18 @@
 document.getElementById('logoutBtn').addEventListener('click', (e) => {
                 e.preventDefault();
                 localStorage.removeItem('tokenCharity_Institute');
-                window.location.href = 'http://65.2.126.107:3000/charitylife/charity/login';
+                window.location.href = 'http://43.205.236.91:3000/charitylife/charity/login';
             });
         document.addEventListener("DOMContentLoaded", function () {
             const token = localStorage.getItem('tokenCharity_Institute');
 
             if (!token) {
                 alert("No token found, please login first.");
-                window.location.href = "http://65.2.126.107:3000/charitylife/charity/login";
+                window.location.href = "http://43.205.236.91:3000/charitylife/charity/login";
                 return;
             }
 
-            axios.get('http://65.2.126.107:3000/charitylife/charity/charityDetails', {
+            axios.get('http://43.205.236.91:3000/charitylife/charity/charityDetails', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -55,7 +55,7 @@ document.getElementById('logoutBtn').addEventListener('click', (e) => {
         async function loadDonations() {
             try {
                 const token = localStorage.getItem('tokenCharity_Institute');
-                const response = await axios.get('http://65.2.126.107:3000/charitylife/charity/donations', {
+                const response = await axios.get('http://43.205.236.91:3000/charitylife/charity/donations', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
